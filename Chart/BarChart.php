@@ -27,6 +27,11 @@ class BarChart extends Chart
         
         foreach ($this->_data as $key => $item) {
             $yBarPosition = $key * $this->rowHeight + $this->barOffset + $this->graphY;
+            if (!empty($item['color'])) {
+                $barColor = $item['color'];
+            } else {
+                $barColor = 'rgb('.rand(0,255).','.rand(0,255).','.rand(0,255).')';
+            }
             $this->data[] = array(
                 'rowPosition' => $key * $this->rowHeight + $this->graphY,
                 'yBarPosition' => $yBarPosition,
@@ -34,8 +39,7 @@ class BarChart extends Chart
                 'barValue' => $item['value'],
                 'barLabel' => $item['label'],
                 'barWidth' => $this->_normalise($item['value']),
-                'barColor' => 'rgb('.rand(0,255).','.rand(0,255).','.rand(0,255).')',
-                //'barColor' => '#4F81BD',
+                'barColor' => $barColor,
             );
         }
         return $this->getView();
