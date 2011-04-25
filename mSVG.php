@@ -113,8 +113,8 @@ class mSVG
         // https://chart.googleapis.com/chart?cht=p&chd=t:40,1,1,1,1,1,1,1,30&chs=350x200&chp=-1.57&chl=World|World|World|World|World|World|World|World|World
         $route = array();
         // Starting point
-        $x = $center['x'] + cos(deg2rad($offset+$size/2)) * $this->size;
-        $y = $center['y'] + sin(deg2rad($offset+$size/2)) * $this->size;
+        $x = $center['x'] + cos(deg2rad($offset+$size/2)) * ($this->size-1);
+        $y = $center['y'] + sin(deg2rad($offset+$size/2)) * ($this->size-1);
         $route[] = "$x,$y";
         
         // Little stub
@@ -178,7 +178,7 @@ class mSVG
             'linkY' => $linky,
         );
     }
-    
+
     /**
      * Returns a random hex color
      *
