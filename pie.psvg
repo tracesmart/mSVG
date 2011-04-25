@@ -1,0 +1,20 @@
+<?php header('content-type: application/xhtml+xml; charset=UTF-8');?>
+<?xml version="1.0" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <g stroke='black'>
+        <?php $text = '';?>
+        <?php foreach ($this->slices as $slice):?>
+            <?php $p = $slice['position']?>
+            <?php $f = $slice['color']?>
+            <path stroke='white' fill="<?php echo $f?>" 
+                d="M <?php echo $this->center['x'] ?>,<?php echo $this->center['y'] ?> 
+                l <?php echo $p['lineX']?>,<?php echo $p['lineY']?> 
+                a<?php echo $this->size?>,<?php echo $this->size?> 0 <?php echo $p['arc']?>,0 
+                <?php echo $p['arcX']?>,<?php echo $p['arcY']?> z" />
+            <polyline points="<?php echo $slice['link']['path']?>" fill='none' />
+            <text style="text-anchor: <?php echo $slice['link']['label']['align']?>; dominant-baseline: middle;" 
+                x='<?php echo $slice['link']['label']['x']?>' 
+                y='<?php echo $slice['link']['label']['y']?>'><?php echo $slice['label']?></text>
+        <?php endforeach; ?>
+    </g>
+</svg>
