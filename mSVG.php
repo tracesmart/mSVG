@@ -28,7 +28,7 @@ class mSVG
      *
      * @var array
      **/
-    protected $labels = array('left' => 0, 'right' => 0);
+    protected $labels = array('left' => array(), 'right' => array());
     
     /**
      * undocumented class variable
@@ -65,7 +65,7 @@ class mSVG
     }
     
     /**
-     * Sets the daat
+     * Sets the data
      *
      * @return void
      * @author Yarek Tyshchenko
@@ -90,15 +90,122 @@ class mSVG
             $slices[] = array(
                 'size' => $size,
                 'offset' => $offset,
-                'label' => $label,
+                'label' => array('text' => $label),
                 'color' => $this->getGradientColor(),
                 'position' => $this->getSlicePosition($sizeInDegrees, $offset, $this->center),
                 'link' => $this->getLinkRoute($sizeInDegrees, $offset, $this->center),
             );
             $offset = $sizeInDegrees + $offset;
         }
+        $this->labels = $this->preprocessLabelPositions($slices);
+        $this->repositionLabels();
+        $slices = $this->processLabelPosition($slices);
         //echo '<pre>';print_r($slices);die;
         return $slices;
+    }
+    
+    /**
+     * Reposition Labels
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function repositionLabels()
+    {
+        $d = 0;
+        if($d)echo '<pre>';
+        $labelsLeft = $this->labels['left'];
+        $offset = 13;
+        $limit = 240;
+        for ($i = 0; $i < count($labelsLeft); $i++) {
+            $label = $labelsLeft[$i]['position'];
+            $prev = @$labelsLeft[$i-1]['position'];
+            $next = @$labelsLeft[$i+1]['position'];
+            
+            if(is_null($prev) || is_null($next)) {
+                continue;
+            }
+            if($d) print_r($label.PHP_EOL);
+            $c = 0;
+            while(true) {
+                if($c++ > 1000) break;
+                // If label is too close to the edge
+                if ($labelsLeft[$i]['position'] < $offset) {
+                    $labelsLeft[$i]['position']++;
+                    if($d) print_r($c.' Top Edge is '.$labelsLeft[$i]['position'].PHP_EOL);
+                    continue;
+                }
+                
+                if ($labelsLeft[$i]['position'] > $limit - $offset) {
+                    $labelsLeft[$i]['position']--;
+                    if($d) print_r($c.' Bottom Edge '.$labelsLeft[$i]['position'].PHP_EOL);
+                    continue;
+                }
+                
+                // If label is too close to a previous label
+                if ($labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position'] < $offset) {
+                    if($d) print_r("difference between prev and current : ".($labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position']).PHP_EOL);
+                    $labelsLeft[$i-1]['position']++;
+                    $labelsLeft[$i]['position']--;
+                } else if ($labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position'] < $offset) {
+                    if($d) print_r("difference between current and next : ".($labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position']).PHP_EOL);
+                    $labelsLeft[$i]['position']++;
+                    $labelsLeft[$i+1]['position']--;
+                } else {
+                    if($d) print_r($c.' Break'.PHP_EOL);
+                    break;
+                }
+                
+            }
+        }
+        if($d) print_r($labelsLeft);
+        if($d) die;
+        $this->labels['left'] = $labelsLeft;
+    }
+    
+    /**
+     * Process offset label position
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function processLabelPosition($slices)
+    {
+        $labels = array_merge($this->labels['left'], $this->labels['right']);
+        foreach($labels as $label) {
+            $slices[$label['key']]['link']['label']['y'] = $label['position'];
+        }
+        return $slices;
+    }
+    
+    /**
+     * Preprocesses positions of labels
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function preprocessLabelPositions($slices)
+    {
+        $labelsLeft = array();
+        $labelsRight = array(); 
+        foreach ($slices as $key => $slice) {
+            if ($slice['link']['label']['align'] == 'end') {
+                $labelsLeft[] = array(
+                    'key' => $key,
+                    'position' => $slice['link']['label']['y'],
+                    'preferred' => $slice['link']['label']['y'],
+                    'label' => $slice['label']['text'],
+                    );
+            } else {
+                $labelsRight[] = array(
+                    'key' => $key,
+                    'position' => $slice['link']['label']['y'],
+                    'preferred' => $slice['link']['label']['y'],
+                    'label' => $slice['label']['text'],
+                    );
+            }
+        }
+        return $labels = array('left' => $labelsLeft, 'right' => $labelsRight);
     }
     
     /**
@@ -115,12 +222,13 @@ class mSVG
         // Starting point
         $x = $center['x'] + cos(deg2rad($offset+$size/2)) * ($this->size-1);
         $y = $center['y'] + sin(deg2rad($offset+$size/2)) * ($this->size-1);
-        $route[] = "$x,$y";
+        //$route[] = (floor($x)+0.5).','.(floor($y) + 0.5);
+        $route[] = $x.','.$y;
         
         // Little stub
         $x = $center['x'] + cos(deg2rad($offset+$size/2)) * ($this->size+5);
         $y = $center['y'] + sin(deg2rad($offset+$size/2)) * ($this->size+5);
-        $route[] = "$x,$y";
+        $route[] = (floor($x)+0.5).','.(floor($y) + 0.5);
 
         // Horizontal Line
         $stub = 10;
@@ -134,7 +242,7 @@ class mSVG
             $align = 'start';
         }
         
-        $route[] = "$x,$y";
+        $route[] = round($x).','.(floor($y) + 0.5);
         
         return array(
             'path' => implode(' ', $route),
