@@ -295,11 +295,11 @@ class mSVG
         $stub = 5;
         if($offset+$size/2 > 90) {
             $x -= $stub + $this->size + cos(deg2rad($offset+$size/2)) * ($this->size+5);
-            $labelx = $x - 25;
+            $labelx = $x - 20;
             $align = 'end';
         } else {
             $x += $stub + $this->size - cos(deg2rad($offset+$size/2)) * ($this->size+5);
-            $labelx = $x + 25;
+            $labelx = $x + 20;
             $align = 'start';
         }
         
