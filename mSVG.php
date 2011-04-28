@@ -121,7 +121,7 @@ class mSVG
         $labelsLeft = $this->labels['left'];
         if($d) print_r('Labels Left'.PHP_EOL);
         for ($i = 0; $i < count($labelsLeft); $i++) {
-            if(is_null(@$labelsLeft[$i-1]['position']) || is_null(@$labelsLeft[$i+1]['position'])) {
+            if(is_null(@$labelsLeft[$i-1]) || is_null(@$labelsLeft[$i+1])) {
                 continue;
             }
             if($d) print_r($labelsLeft[$i]['position'].PHP_EOL);
@@ -160,10 +160,9 @@ class mSVG
         $this->labels['left'] = $labelsLeft;
         
         if($d) print_r('Labels Right'.PHP_EOL);
-        $offset = 13;
         $labelsRight = $this->labels['right'];
         for ($i = 0; $i < count($labelsRight); $i++) {
-            if(is_null(@$labelsRight[$i-1]['position']) || is_null(@$labelsRight[$i+1]['position'])) {
+            if(is_null(@$labelsRight[$i-1]) || is_null(@$labelsRight[$i+1])) {
                 continue;
             }
             $c = 0;
@@ -199,7 +198,6 @@ class mSVG
             }
         }
         $this->labels['right'] = $labelsRight;
-        if($d) print_r($this->labels);
         if($d) die;
     }
     
@@ -211,8 +209,9 @@ class mSVG
      **/
     public function finishLinkRoute($slices)
     {
+        
         foreach($this->labels['left'] as $label) {
-            $y = round($label['position'])+0.5;
+            $y = round($label['position'])-0.5;
             $x = $slices[$label['key']]['link']['label']['x'] + 10;
             $slices[$label['key']]['link']['path'] .= " $x,$y ".($x - 5).",$y";
         }
@@ -277,8 +276,6 @@ class mSVG
      **/
     public function getLinkRoute($size, $offset, $center)
     {
-        // https://chart.googleapis.com/chart?cht=p&chd=t:40,1,1,1,1,1,1,1,1&chs=350x200&chp=-1.57&chl=World|World|World|World|World|World|World|World|World
-        // https://chart.googleapis.com/chart?cht=p&chd=t:40,1,1,1,1,1,1,1,30&chs=350x200&chp=-1.57&chl=World|World|World|World|World|World|World|World|World
         $route = array();
         // Starting point
         $x = $center['x'] + cos(deg2rad($offset+$size/2)) * ($this->size-1);
@@ -309,8 +306,8 @@ class mSVG
             'path' => implode(' ', $route),
             'label' => array(
                 'align' => $align,
-                'x' => $labelx,
-                'y' => $y,
+                'x' => round($labelx),
+                'y' => (floor($y) + 0.5),
             ),
         );
     }
