@@ -116,8 +116,8 @@ class mSVG
     {
         $d = 0;
         if($d) echo '<pre>';
+        $limit = $this->center['y']*2;
         $offset = 13;
-        $limit = 240;
         $labelsLeft = $this->labels['left'];
         if($d) print_r('Labels Left'.PHP_EOL);
         for ($i = 0; $i < count($labelsLeft); $i++) {
@@ -129,13 +129,13 @@ class mSVG
             while(true) {
                 if($c++ > 1000) break;
                 // If label is too close to the edge
-                if ($labelsLeft[$i]['position'] < $offset) {
+                if ($labelsLeft[$i]['position'] < $offset * 2) {
                     $labelsLeft[$i]['position']++;
                     if($d) print_r($c.' Top Edge is '.$labelsLeft[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
-                if ($labelsLeft[$i]['position'] > $limit - $offset) {
+                if ($labelsLeft[$i]['position'] > $limit - $offset*2) {
                     $labelsLeft[$i]['position']--;
                     if($d) print_r($c.' Bottom Edge '.$labelsLeft[$i]['position'].PHP_EOL);
                     continue;
@@ -160,6 +160,7 @@ class mSVG
         $this->labels['left'] = $labelsLeft;
         
         if($d) print_r('Labels Right'.PHP_EOL);
+        $offset = 13;
         $labelsRight = $this->labels['right'];
         for ($i = 0; $i < count($labelsRight); $i++) {
             if(is_null(@$labelsRight[$i-1]['position']) || is_null(@$labelsRight[$i+1]['position'])) {
@@ -169,13 +170,13 @@ class mSVG
             while(true) {
                 if($c++ > 1000) break;
                 // If label is too close to the edge
-                if ($labelsRight[$i]['position'] < $offset) {
+                if ($labelsRight[$i]['position'] < $offset * 2) {
                     $labelsRight[$i]['position']++;
                     if($d) print_r($c.' Top Edge is '.$labelsRight[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
-                if ($labelsRight[$i]['position'] > $limit - $offset) {
+                if ($labelsRight[$i]['position'] > $limit - $offset*2) {
                     $labelsRight[$i]['position']--;
                     if($d) print_r($c.' Bottom Edge '.$labelsRight[$i]['position'].PHP_EOL);
                     continue;
@@ -211,12 +212,12 @@ class mSVG
     public function finishLinkRoute($slices)
     {
         foreach($this->labels['left'] as $label) {
-            $y = $label['position'];
+            $y = round($label['position'])+0.5;
             $x = $slices[$label['key']]['link']['label']['x'] + 10;
             $slices[$label['key']]['link']['path'] .= " $x,$y ".($x - 5).",$y";
         }
         foreach($this->labels['right'] as $label) {
-            $y = $label['position'];
+            $y = round($label['position'])-0.5;
             $x = $slices[$label['key']]['link']['label']['x'] - 10;
             $slices[$label['key']]['link']['path'] .= " $x,$y ".($x + 5).",$y";
         }
