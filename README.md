@@ -13,3 +13,8 @@ PHP Short Open tags needs to be disabled, as XML declaration starts with <? ?>
 License
 -------
 This project is licensed under GNU Lesser General Public License v3
+
+Example
+-------
+
+<img src='http://grittytech.co.uk/projects/mSVG/index.php?d=' />
