@@ -8,9 +8,8 @@ class mView
     
     public function render() {
         ob_start();
-	include $this->graph.'.psvg';
-        $outout = ob_get_contents();
-        ob_clean();
+        include $this->graph.'.psvg';
+        $outout = ob_get_clean();
         return $outout;
     }
 }

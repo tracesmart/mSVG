@@ -42,6 +42,13 @@ class mSVG
     );
     
     /**
+     * Colors array
+     *
+     * @var array
+     **/
+    protected $colors;
+    
+    /**
      * Sets the radius of the disk
      *
      * @return void
@@ -76,6 +83,17 @@ class mSVG
     }
     
     /**
+     * Sets the colors for data
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function setColors($colors)
+    {
+        $this->colors = $colors;
+    }
+    
+    /**
      * Get slices from data
      *
      * @return array
@@ -91,7 +109,7 @@ class mSVG
                 'size' => $size,
                 'offset' => $offset,
                 'label' => array('text' => $label),
-                'color' => $this->getGradientColor(),
+                'color' => $this->getColorForSliceLabel($label),
                 'position' => $this->getSlicePosition($sizeInDegrees, $offset, $this->center),
                 'link' => $this->getLinkRoute($sizeInDegrees, $offset, $this->center),
             );
@@ -332,16 +350,12 @@ class mSVG
         $y = sin($angle) * $this->size;
         $arcx = $x - (cos(deg2rad($offset)) * $this->size);
         $arcy = $y - (sin(deg2rad($offset)) * $this->size);
-        $linkx = $center['x'] + cos(deg2rad($offset+$size/2)) * $this->size;
-        $linky = $center['y'] + sin(deg2rad($offset+$size/2)) * $this->size;
         return array(
-            'lineX' => $x,
-            'lineY' => $y,
+            'lineX' => sprintf("%.0f", $x),
+            'lineY' => sprintf("%.0f", $y),
             'arc' => $arcType,
             'arcX' => -($arcx),
             'arcY' => -($arcy),
-            'linkX' => $linkx,
-            'linkY' => $linky,
         );
     }
 
@@ -365,6 +379,17 @@ class mSVG
     public function getRandomColor()
     {
         return 'rgb('.rand(0,255).','.rand(0,255).','.rand(0,255).')';
+    }
+    
+    /**
+     * Returns the color for a slice Label
+     *
+     * @return color
+     * @author Yarek Tyshchenko
+     **/
+    public function getColorForSliceLabel($label)
+    {
+        return $this->colors[$label];
     }
     
     /**
@@ -402,5 +427,16 @@ class mSVG
         $mView->center = $this->center;
         $mView->slices = $this->getSlices($this->data);
         return $mView->render();
+    }
+    
+    /**
+     * Renders an SVG and writes it to a file
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function writeToFile($file, $graph)
+    {
+        file_put_contents($file, $this->render($graph));
     }
 }
