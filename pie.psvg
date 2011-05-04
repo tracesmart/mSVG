@@ -1,5 +1,6 @@
 <?php echo '<?xml version="1.0" standalone="no"?>'?>
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="500" height="200">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="670" height="200">
+    <!--rect x="0" y="0" width="670" height="200" fill='none' stroke='black' /-->
     <g>
     <?php foreach ($this->slices as $slice):?>
         <path 
@@ -18,19 +19,19 @@
             text-anchor="<?php echo $slice['link']['label']['align']?>"
             style="font-family: monaco;"
             x='<?php echo $slice['link']['label']['x']?>' 
-            y='<?php echo $slice['link']['label']['y'] + 3?>'><?php echo $slice['label']['text']?></text>
+            y='<?php echo $slice['link']['label']['y'] + 3?>'><?php echo $slice['label']['text']?> (<?php echo $slice['percent']?>%)</text>
     <?php endforeach; ?>
     </g>
     <g>
-        <?php $y = 20;?>
+        <?php $y = 15;?>
         <?php foreach($this->slices as $slice):?>
-            <rect x="360" y="<?php echo $y?>" width="12" height="12" stroke="none" fill="<?php echo $slice['color']?>" />
+            <rect x="500" y="<?php echo $y?>" width="15" height="15" stroke="none" fill="<?php echo $slice['color']?>" />
             <text
                 font-size="12"
                 style="font-family: monaco;"
-                x="380"
-                y="<?php echo $y+10?>"><?php echo $slice['label']['text']?></text>
-        <?php $y+=20 ?>
+                x="530"
+                y="<?php echo $y+11?>"><?php echo $slice['label']['text']?> (<?php echo $slice['size']?>)</text>
+        <?php $y += 20 ?>
         <?php endforeach;?>
     </g>
 </svg>

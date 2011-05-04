@@ -107,9 +107,11 @@ class mSVG
             $sizeInDegrees = $size / array_sum($this->data) * 360;
             $slices[] = array(
                 'size' => $size,
+                'percent' => round($size / array_sum($this->data) * 100),
                 'offset' => $offset,
                 'label' => array('text' => $label),
                 'color' => $this->getColorForSliceLabel($label),
+                //'color' => $this->getRandomColor(),
                 'position' => $this->getSlicePosition($sizeInDegrees, $offset, $this->center),
                 'link' => $this->getLinkRoute($sizeInDegrees, $offset, $this->center),
             );
