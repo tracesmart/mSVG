@@ -94,6 +94,17 @@ class mSVG
     }
     
     /**
+     * sprintf's the number
+     *
+     * @return float
+     * @author Yarek Tyshchenko
+     **/
+    public function r($number)
+    {
+        return sprintf('%f', $number);
+    }
+    
+    /**
      * Get slices from data
      *
      * @return array
@@ -353,11 +364,11 @@ class mSVG
         $arcx = $x - (cos(deg2rad($offset)) * $this->size);
         $arcy = $y - (sin(deg2rad($offset)) * $this->size);
         return array(
-            'lineX' => sprintf("%.0f", $x),
-            'lineY' => sprintf("%.0f", $y),
+            'lineX' => $this->r($x),
+            'lineY' => $this->r($y),
             'arc' => $arcType,
-            'arcX' => -($arcx),
-            'arcY' => -($arcy),
+            'arcX' => $this->r(-($arcx)),
+            'arcY' => $this->r(-($arcy)),
         );
     }
 
