@@ -49,6 +49,24 @@ class mSVG
     protected $colors;
     
     /**
+     * Label percentage rounding precision
+     *
+     * @var int
+     **/
+    protected $precision;
+    
+    /**
+     * Sets the label rounding precision
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function setPrecision($precision)
+    {
+        $this->precision = $precision;
+    }
+    
+    /**
      * Sets the radius of the disk
      *
      * @return void
@@ -118,7 +136,7 @@ class mSVG
             $sizeInDegrees = $size / array_sum($this->data) * 360;
             $slices[] = array(
                 'size' => $size,
-                'percent' => round($size / array_sum($this->data) * 100),
+                'percent' => $size / array_sum($this->data) * 100,
                 'offset' => $offset,
                 'label' => array('text' => $label),
                 'color' => $this->getColorForSliceLabel($label),
@@ -133,7 +151,43 @@ class mSVG
             $this->repositionLabels();
         $slices = $this->finishLinkRoute($slices);
         $slices = $this->processLabelPosition($slices);
+        $slices = $this->correctPercentages($slices, $this->precision);
         //echo '<pre>';print_r($slices);die;
+        return $slices;
+    }
+    
+    /**
+     * Fudges one of the values so the total would equal 100%
+     *
+     * @return array
+     * @author Yarek Tyshchenko
+     **/
+    public function correctPercentages($slices, $precision = null)
+    {
+        if(is_null($precision))
+            $precision = 2;
+        $total = 0;
+        $biggestSlice = 0;
+        // Loop through all slices, find the biggest and compute the total
+        foreach ($slices as $key => $slice) {
+            $total += round($slice['percent'],$precision);
+            if($slices[$biggestSlice]['size'] < $slice['size']) {
+                $biggestSlice = $key;
+            }
+        }
+        
+        if($total > 100) {
+            $slices[$biggestSlice]['percent'] = floor($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
+        } else if ($total < 100) {
+            $slices[$biggestSlice]['percent'] = ceil($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
+        }
+        
+        foreach ($slices as $key => $slice) {
+            if($biggestSlice === $key)
+                continue;
+            $slices[$key]['percent'] = round($slice['percent'], $precision);
+        }
+
         return $slices;
     }
     
