@@ -4,15 +4,15 @@
     <g>
     <?php foreach ($this->slices as $slice):?>
         <path 
-            stroke='white'
+            stroke="white"
             fill="<?php echo $slice['color']?>" 
             d="M <?php echo $this->center['x'] ?>,<?php echo $this->center['y'] ?> 
             l <?php echo $slice['position']['lineX']?>,<?php echo $slice['position']['lineY']?> 
             a<?php echo $this->size?>,<?php echo $this->size?> 0 <?php echo $slice['position']['arc']?>,0 
             <?php echo $slice['position']['arcX']?>,<?php echo $slice['position']['arcY']?> z" />
         <polyline
-            stroke='black'
-            fill='none'
+            stroke="black"
+            fill="none"
             points="<?php echo $slice['link']['path']?>" />
         <text 
             font-size="12"

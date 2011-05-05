@@ -2,15 +2,23 @@
 include 'mSVG.php';
 
 $m = new mSVG();
-$m->setSize(100);
-$m->setCenter(250.5,120.5);
+$m->setSize(80);
+$m->setCenter(250,100);
 $m->setData(array(
     'Hyperspace' => 7,
     'Fire Control' => 15,
     'Gravity Well' => 5,
-    'Resource Drop-off' => 7,
+    'RU Drop-off' => 7,
     'Research Module' => 1,
     'Platform Module' => 2,
+));
+$m->setColors(array(
+    'Hyperspace' => 'blue',
+    'Fire Control' => 'red',
+    'Gravity Well' => 'Yellow',
+    'RU Drop-off' => 'Orange',
+    'Research Module' => 'Green',
+    'Platform Module' => 'Purple',
 ));
 //$m->setData(array(40,1,1,1,1,1,1,1,30));
 //$m->setData(array(40,1,1,1,1,1,1,30,20,100,20,33,33,3,2,3,34,4,23,2,3,20));
@@ -28,4 +36,5 @@ if(!empty($_GET['d'])) {
     }
     $m->setData($data);
 }
+header('Content-Type: image/svg+xml');
 echo $m->render('pie');
