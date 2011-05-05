@@ -180,6 +180,8 @@ class mSVG
             $slices[$biggestSlice]['percent'] = floor($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
         } else if ($total < 100) {
             $slices[$biggestSlice]['percent'] = ceil($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
+        } else {
+            $slices[$biggestSlice]['percent'] = round($slices[$biggestSlice]['percent'], $precision);
         }
         
         foreach ($slices as $key => $slice) {
