@@ -136,7 +136,7 @@ class mSVG
             $sizeInDegrees = $size / array_sum($this->data) * 360;
             $slices[] = array(
                 'size' => $size,
-                'percent' => $size / array_sum($this->data) * 100,
+                'percent' => round($size / array_sum($this->data) * 100, $this->precision),
                 'circle' => ($size == array_sum($this->data))?true:false,
                 'offset' => $offset,
                 'label' => array('text' => $label),
@@ -152,7 +152,7 @@ class mSVG
             $this->repositionLabels();
         $slices = $this->finishLinkRoute($slices);
         $slices = $this->processLabelPosition($slices);
-        $slices = $this->correctPercentages($slices, $this->precision);
+        $slices = $this->correctPercentages($slices);
         //echo '<pre>';print_r($slices);die;
         return $slices;
     }
@@ -163,34 +163,24 @@ class mSVG
      * @return array
      * @author Yarek Tyshchenko
      **/
-    public function correctPercentages($slices, $precision = null)
+    public function correctPercentages($slices)
     {
-        if(is_null($precision))
-            $precision = 2;
         $total = 0;
         $biggestSlice = 0;
         // Loop through all slices, find the biggest and compute the total
         foreach ($slices as $key => $slice) {
-            $total += round($slice['percent'],$precision);
+            $total += round($slice['percent'],$this->precision);
             if($slices[$biggestSlice]['size'] < $slice['size']) {
                 $biggestSlice = $key;
             }
         }
-        
-        if($total > 100) {
-            $slices[$biggestSlice]['percent'] = floor($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
-        } else if ($total < 100) {
-            $slices[$biggestSlice]['percent'] = ceil($slices[$biggestSlice]['percent'] * pow(10,$precision)) / pow(10,$precision);
-        } else {
-            $slices[$biggestSlice]['percent'] = round($slices[$biggestSlice]['percent'], $precision);
-        }
-        
-        foreach ($slices as $key => $slice) {
-            if($biggestSlice === $key)
-                continue;
-            $slices[$key]['percent'] = round($slice['percent'], $precision);
-        }
 
+        if($total > 100) {
+            $slices[$biggestSlice]['percent'] -= ($total - 100);
+        } else if ($total < 100) {
+            $slices[$biggestSlice]['percent'] += (100 - $total);
+        }
+        
         return $slices;
     }
     
@@ -203,38 +193,34 @@ class mSVG
     public function repositionLabels()
     {
         $d = 0;
-        if($d) echo '<pre>';
         $limit = $this->center['y']*2;
         $offset = 13;
         $labelsLeft = $this->labels['left'];
         if($d) print_r('Labels Left'.PHP_EOL);
         for ($i = 0; $i < count($labelsLeft); $i++) {
-            if(is_null(@$labelsLeft[$i-1]) || is_null(@$labelsLeft[$i+1])) {
-                continue;
-            }
             if($d) print_r($labelsLeft[$i]['position'].PHP_EOL);
             $c = 0;
             while(true) {
                 if($c++ > 1000) break;
                 // If label is too close to the edge
-                if ($labelsLeft[$i]['position'] < $offset * 2) {
+                if ($labelsLeft[$i]['position'] < $offset) {
                     $labelsLeft[$i]['position']++;
                     if($d) print_r($c.' Top Edge is '.$labelsLeft[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
-                if ($labelsLeft[$i]['position'] > $limit - $offset*2) {
+                if ($labelsLeft[$i]['position'] > $limit - $offset) {
                     $labelsLeft[$i]['position']--;
                     if($d) print_r($c.' Bottom Edge '.$labelsLeft[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
                 // If label is too close to a previous label
-                if ($labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position'] < $offset) {
+                if (!is_null(@$labelsLeft[$i-1]) && $labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position'] < $offset) {
                     if($d) print_r("difference between prev and current : ".($labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position']).PHP_EOL);
                     $labelsLeft[$i-1]['position']++;
                     $labelsLeft[$i]['position']--;
-                } else if ($labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position'] < $offset) {
+                } else if (!is_null(@$labelsLeft[$i+1]) && $labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position'] < $offset) {
                     if($d) print_r("difference between current and next : ".($labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position']).PHP_EOL);
                     $labelsLeft[$i]['position']++;
                     $labelsLeft[$i+1]['position']--;
@@ -250,31 +236,28 @@ class mSVG
         if($d) print_r('Labels Right'.PHP_EOL);
         $labelsRight = $this->labels['right'];
         for ($i = 0; $i < count($labelsRight); $i++) {
-            if(is_null(@$labelsRight[$i-1]) || is_null(@$labelsRight[$i+1])) {
-                continue;
-            }
             $c = 0;
             while(true) {
                 if($c++ > 1000) break;
                 // If label is too close to the edge
-                if ($labelsRight[$i]['position'] < $offset * 2) {
+                if ($labelsRight[$i]['position'] < $offset) {
                     $labelsRight[$i]['position']++;
                     if($d) print_r($c.' Top Edge is '.$labelsRight[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
-                if ($labelsRight[$i]['position'] > $limit - $offset*2) {
+                if ($labelsRight[$i]['position'] > $limit - $offset) {
                     $labelsRight[$i]['position']--;
                     if($d) print_r($c.' Bottom Edge '.$labelsRight[$i]['position'].PHP_EOL);
                     continue;
                 }
                 
                 // If label is too close to a previous label
-                if ($labelsRight[$i+1]['position'] - $labelsRight[$i]['position'] < $offset) {
+                if (!is_null(@$labelsRight[$i+1]) && $labelsRight[$i+1]['position'] - $labelsRight[$i]['position'] < $offset) {
                     if($d) print_r("difference between prev and current : ".($labelsRight[$i+1]['position'] - $labelsRight[$i]['position']).PHP_EOL);
                     $labelsRight[$i+1]['position']++;
                     $labelsRight[$i]['position']--;
-                } else if ($labelsRight[$i]['position'] - $labelsRight[$i-1]['position'] < $offset) {
+                } else if (!is_null(@$labelsRight[$i-1]) && $labelsRight[$i]['position'] - $labelsRight[$i-1]['position'] < $offset) {
                     if($d) print_r("difference between current and next : ".($labelsRight[$i]['position'] - $labelsRight[$i-1]['position']).PHP_EOL);
                     $labelsRight[$i]['position']++;
                     $labelsRight[$i-1]['position']--;

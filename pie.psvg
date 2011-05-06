@@ -4,29 +4,25 @@
     <g>
     <?php foreach ($this->slices as $slice):?>
         <?php if ($slice['circle'] === true):?>
-        <circle 
-            stroke="white"
+        <circle stroke="white"
             fill="<?php echo $slice['color']?>"
             cx="<?php echo $this->center['x']?>"
             cy="<?php echo $this->center['y']?>"
             r="<?php echo $this->size?>"/>
         <?php else:?>
-        <path 
-            stroke="white"
+        <path stroke="white"
             fill="<?php echo $slice['color']?>" 
             d="M <?php echo $this->center['x'] ?>,<?php echo $this->center['y'] ?> 
             l <?php echo $slice['position']['lineX']?>,<?php echo $slice['position']['lineY']?> 
             a<?php echo $this->size?>,<?php echo $this->size?> 0 <?php echo $slice['position']['arc']?>,0 
             <?php echo $slice['position']['arcX']?>,<?php echo $slice['position']['arcY']?> z" />
         <?php endif;?>
-        <polyline
-            stroke="black"
+        <polyline stroke="black"
             fill="none"
             points="<?php echo $slice['link']['path']?>" />
-        <text 
-            font-size="12"
+        <text font-size="12"
             text-anchor="<?php echo $slice['link']['label']['align']?>"
-            style="font-family: monaco;"
+            style="font-family: Arial;"
             x='<?php echo $slice['link']['label']['x']?>' 
             y='<?php echo $slice['link']['label']['y'] + 3?>'><?php echo $slice['label']['text']?> (<?php echo $slice['percent']?>%)</text>
     <?php endforeach; ?>
@@ -37,7 +33,7 @@
             <rect x="500" y="<?php echo $y?>" width="15" height="15" stroke="none" fill="<?php echo $slice['color']?>" />
             <text
                 font-size="12"
-                style="font-family: monaco;"
+                style="font-family: Arial;"
                 x="530"
                 y="<?php echo $y+11?>"><?php echo $slice['label']['text']?> (<?php echo $slice['size']?>)</text>
         <?php $y += 20 ?>
