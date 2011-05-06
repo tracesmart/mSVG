@@ -3,6 +3,14 @@
     <!--rect x="0" y="0" width="670" height="200" fill='none' stroke='black' /-->
     <g>
     <?php foreach ($this->slices as $slice):?>
+        <?php if ($slice['circle'] === true):?>
+        <circle 
+            stroke="white"
+            fill="<?php echo $slice['color']?>"
+            cx="<?php echo $this->center['x']?>"
+            cy="<?php echo $this->center['y']?>"
+            r="<?php echo $this->size?>"/>
+        <?php else:?>
         <path 
             stroke="white"
             fill="<?php echo $slice['color']?>" 
@@ -10,6 +18,7 @@
             l <?php echo $slice['position']['lineX']?>,<?php echo $slice['position']['lineY']?> 
             a<?php echo $this->size?>,<?php echo $this->size?> 0 <?php echo $slice['position']['arc']?>,0 
             <?php echo $slice['position']['arcX']?>,<?php echo $slice['position']['arcY']?> z" />
+        <?php endif;?>
         <polyline
             stroke="black"
             fill="none"

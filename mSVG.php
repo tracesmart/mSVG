@@ -137,6 +137,7 @@ class mSVG
             $slices[] = array(
                 'size' => $size,
                 'percent' => $size / array_sum($this->data) * 100,
+                'circle' => ($size == array_sum($this->data))?true:false,
                 'offset' => $offset,
                 'label' => array('text' => $label),
                 'color' => $this->getColorForSliceLabel($label),
