@@ -216,11 +216,11 @@ class mSVG
                 }
                 
                 // If label is too close to a previous label
-                if (!is_null(@$labelsLeft[$i-1]) && $labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position'] < $offset) {
+                if (!empty($labelsLeft[$i-1]) && $labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position'] < $offset) {
                     if($d) print_r("difference between prev and current : ".($labelsLeft[$i-1]['position'] - $labelsLeft[$i]['position']).PHP_EOL);
                     $labelsLeft[$i-1]['position']++;
                     $labelsLeft[$i]['position']--;
-                } else if (!is_null(@$labelsLeft[$i+1]) && $labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position'] < $offset) {
+                } else if (!empty($labelsLeft[$i+1]) && $labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position'] < $offset) {
                     if($d) print_r("difference between current and next : ".($labelsLeft[$i]['position'] - $labelsLeft[$i+1]['position']).PHP_EOL);
                     $labelsLeft[$i]['position']++;
                     $labelsLeft[$i+1]['position']--;
@@ -253,11 +253,11 @@ class mSVG
                 }
                 
                 // If label is too close to a previous label
-                if (!is_null(@$labelsRight[$i+1]) && $labelsRight[$i+1]['position'] - $labelsRight[$i]['position'] < $offset) {
+                if (!empty($labelsRight[$i+1]) && $labelsRight[$i+1]['position'] - $labelsRight[$i]['position'] < $offset) {
                     if($d) print_r("difference between prev and current : ".($labelsRight[$i+1]['position'] - $labelsRight[$i]['position']).PHP_EOL);
                     $labelsRight[$i+1]['position']++;
                     $labelsRight[$i]['position']--;
-                } else if (!is_null(@$labelsRight[$i-1]) && $labelsRight[$i]['position'] - $labelsRight[$i-1]['position'] < $offset) {
+                } else if (!empty($labelsRight[$i-1]) && $labelsRight[$i]['position'] - $labelsRight[$i-1]['position'] < $offset) {
                     if($d) print_r("difference between current and next : ".($labelsRight[$i]['position'] - $labelsRight[$i-1]['position']).PHP_EOL);
                     $labelsRight[$i]['position']++;
                     $labelsRight[$i-1]['position']--;
