@@ -30,11 +30,11 @@
     <g>
         <?php $y = 15;?>
         <?php foreach($this->slices as $slice):?>
-            <rect x="500" y="<?php echo $y?>" width="15" height="15" stroke="none" fill="<?php echo $slice['color']?>" />
+            <rect x="520" y="<?php echo $y?>" width="15" height="15" stroke="none" fill="<?php echo $slice['color']?>" />
             <text
                 font-size="12"
                 style="font-family: Arial;"
-                x="530"
+                x="550"
                 y="<?php echo $y+11?>"><?php echo $slice['label']['text']?> (<?php echo $slice['size']?>)</text>
         <?php $y += 20 ?>
         <?php endforeach;?>
