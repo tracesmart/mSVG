@@ -61,14 +61,14 @@ class BarChart extends Chart
      **/
     public function setData($data)
     {
-        $max = 0;
+        parent::setData($data);
+        $max = 1;
         foreach ($data as $item) {
             if ($item['value'] > $max) {
                 $max = $item['value'];
             }
         }
         $this->max = $max;
-        parent::setData($data);
     }
     
 } // END class BarChart
