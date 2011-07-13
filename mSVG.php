@@ -1,7 +1,48 @@
 <?php
 include 'mView.php';
+include 'Chart.php';
+include 'Chart/BarChart.php';
 class mSVG
 {
+    /**
+     * Holds the Chart Type class
+     *
+     * @var ChartType
+     **/
+    private $_chart;
+    
+    /**
+     * Sets the chart type class
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function setChartType($chart)
+    {
+        $this->_chart = $chart;
+    }
+    
+    /**
+     * Global Chart Dimensions
+     *
+     * @var Array
+     **/
+    private $_dimensions;
+    
+    /**
+     * Sets the global dimensions
+     *
+     * @return void
+     * @author Yarek Tyshchenko
+     **/
+    public function setDimensions($width, $height)
+    {
+        $this->_dimensions = array(
+            'width' => $width,
+            'height' => $height,
+        );
+    }
+    
     /**
      * Data
      *
@@ -472,6 +513,12 @@ class mSVG
      * @return string
      * @author Yarek Tyshchenko
      **/
+    public function render_rewrite()
+    {
+        $this->_chart->setDimensions($this->_dimensions['width'], $this->_dimensions['height']);
+        $this->_chart->setData($this->data);
+        return $this->_chart->render();
+    }
     public function render($graph)
     {
         $mView = new mView();

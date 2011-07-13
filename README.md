@@ -14,7 +14,8 @@ License
 -------
 This project is licensed under GNU Lesser General Public License v3
 
-Example
--------
+Examples
+--------
 
-<img src='http://grittytech.co.uk/projects/mSVG/index.php' />
+<img src='http://grittytech.co.uk/projects/mSVG/examples/pie.php' />
+<img src='http://grittytech.co.uk/projects/mSVG/examples/bar.php' />

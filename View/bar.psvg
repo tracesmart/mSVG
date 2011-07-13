@@ -1,0 +1,47 @@
+<?php echo '<?xml version="1.0" standalone="no"?>'?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="<?php echo $this->getWidth()?>" height="<?php echo $this->getHeight()?>">
+    <?php for ($i = 0; $i <= 6; $i++):?>
+        <?php $value = $i * ($this->max / 6);?>
+        <?php $x = $i * ($this->graphWidth / 6);?>
+    <text font-size='12'
+        style='font-family: Arial;'
+        text-anchor='middle'
+        x='<?php echo $this->graphX + $x?>'
+        y='<?php echo $this->graphY-10?>'
+        ><?php echo round($value)?></text>
+    <line stroke='gray'
+        x1='<?php echo $this->graphX + $x?>'
+        y1='<?php echo $this->graphY-5?>'
+        x2='<?php echo $this->graphX + $x?>'
+        y2='<?php echo $this->graphY+$this->graphHeight?>' />
+    <?php endfor;?>
+    <line stroke='gray'
+        x1='<?php echo $this->graphX-5?>'
+        y1='<?php echo $this->graphY?>'
+        x2='<?php echo $this->graphX+$this->graphWidth?>'
+        y2='<?php echo $this->graphY?>' />
+    <!-- Create Labels -->
+    <?php foreach ($this->data as $data):?>
+        <line stroke='gray'
+            x1='<?php echo $this->graphX-5?>'
+            y1='<?php echo $data['rowPosition'] + $this->rowHeight?>'
+            x2='<?php echo $this->graphX?>'
+            y2='<?php echo $data['rowPosition'] + $this->rowHeight?>' />
+        <text font-size='12'
+            text-anchor='end'
+            style='font-family: Arial;'
+            x='<?php echo $this->graphX - 10?>'
+            y='<?php echo $data['rowPosition'] + $this->rowHeight/2 + 4?>'
+            ><?php echo $data['barLabel']?> (<?php echo $data['barValue']?>)</text>
+    <?php endforeach;?>
+    
+    <!-- Create bars -->
+    <?php foreach ($this->data as $data):?>
+        <rect fill='<?php echo $data['barColor']?>'
+            x='<?php echo $data['xBarPosition']?>'
+            y='<?php echo $data['yBarPosition']?>'
+            width='<?php echo $data['barWidth']?>'
+            height='<?php echo $this->barHeight?>' />
+    <?php endforeach;?>
+    <!-- end bars -->
+</svg>
