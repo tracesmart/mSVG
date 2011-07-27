@@ -9,6 +9,12 @@
 class BarChart extends Chart
 {
     /**
+     * Default view file
+     * @var string View
+     */
+    protected $_defaultViewFile = 'bar';
+    
+    /**
      * Renders the view file into SVG
      *
      * @return String

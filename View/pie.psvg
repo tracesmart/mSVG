@@ -16,7 +16,7 @@
             a<?php echo $this->size?>,<?php echo $this->size?> 0 <?php echo $slice['position']['arc']?>,0 
             <?php echo $slice['position']['arcX']?>,<?php echo $slice['position']['arcY']?> z" />
         <?php endif;?>
-        <polyline stroke="black"
+        <polyline stroke="gray"
             fill="none"
             points="<?php echo $slice['link']['path']?>" />
         <text font-size="12"

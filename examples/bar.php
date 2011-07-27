@@ -13,8 +13,7 @@ $m->setData(array(
 ));
 
 $chart = new BarChart();
-$chart->setView('bar');
-
 $m->setChartType($chart);
+
 header('Content-Type: image/svg+xml');
 echo $m->render();

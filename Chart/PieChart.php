@@ -10,6 +10,12 @@
 class PieChart extends Chart
 {
     /**
+     * Default view file
+     * @var string View
+     */
+    protected $_defaultViewFile = 'pie';
+    
+    /**
      * Radius of the disk
      *
      * @var int

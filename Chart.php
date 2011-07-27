@@ -30,6 +30,12 @@ abstract class Chart
     protected $_viewFile;
     
     /**
+     * Default view file
+     * @var string
+     */
+    protected $_defaultViewFile;
+    
+    /**
      * Sets the Chart dimensions
      *
      * @return Void
@@ -93,9 +99,21 @@ abstract class Chart
      * @return Void
      * @author Yarek Tyshchenko
      **/
-    public function setView($viewFile)
+    public function setViewFile($viewFile)
     {
         $this->_viewFile = $viewFile;
+    }
+    
+    /**
+     * Returns a default view file if one is not set
+     * @return string ViewFile
+     */
+    public function getViewFile()
+    {
+        if (!$this->_viewFile) {
+            $this->_viewFile = 'View/'.$this->_defaultViewFile.'.psvg';
+        }
+        return $this->_viewFile;
     }
     
     /**
@@ -107,7 +125,7 @@ abstract class Chart
     public function getView()
     {
         ob_start();
-        include 'View/'.$this->_viewFile.'.psvg';
+        include $this->getViewFile();
         $outout = ob_get_clean();
         return $outout;
     }

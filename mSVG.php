@@ -99,8 +99,19 @@ class mSVG
      * @return void
      * @author Yarek Tyshchenko
      **/
-    public function writeToFile($file, $graph)
+    public function writeToFile($file)
     {
-        file_put_contents($file, $this->render($graph));
+        file_put_contents($file, $this->render());
+    }
+    
+    /**
+     * Writes the SVG to a temp file in a specified dir
+     * @return string Filename
+     */
+    public function writeToTempFile($dir)
+    {
+        $file = tempnam($dir, 'graph_');
+        $this->writeToFile($file);
+        return $file;
     }
 }

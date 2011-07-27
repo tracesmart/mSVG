@@ -3,7 +3,6 @@ include '../mSVG.php';
 
 $m = new mSVG();
 $m->setDimensions(670, 200);
-$m->setPrecision(0);
 $m->setData(array(
     array('label' => 'Hyperspace', 'value' => '7'),
     array('label' => 'Fire Control', 'value' => '15'),
@@ -14,11 +13,6 @@ $m->setData(array(
 ));
 
 $chart = new PieChart();
-$chart->setView('pie');
-
-//$chart->setSize(80);
-//$chart->setCenter(250,100);
-
 $m->setChartType($chart);
 
 header('Content-Type: image/svg+xml');
