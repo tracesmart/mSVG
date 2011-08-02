@@ -30,7 +30,7 @@ class BarChart extends Chart
         $this->rowHeight = ($this->graphHeight / count($this->_data));
         $this->barHeight = $this->rowHeight/1.6;
         $this->barOffset = $this->rowHeight/2 - $this->barHeight/2;
-        
+        $this->data = array();
         foreach ($this->_data as $key => $item) {
             $yBarPosition = $key * $this->rowHeight + $this->barOffset + $this->graphY;
             if (!empty($item['color'])) {
