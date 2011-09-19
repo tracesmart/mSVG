@@ -1,8 +1,9 @@
 <?php echo '<?xml version="1.0" standalone="no"?>'?>
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="<?php echo $this->getWidth()?>" height="<?php echo $this->getHeight()?>">
-    <?php for ($i = 0; $i <= 6; $i++):?>
-        <?php $value = $i * ($this->max / 6);?>
-        <?php $x = $i * ($this->graphWidth / 6);?>
+    <?php $ticks = 5;?>
+    <?php for ($i = 0; $i <= $ticks; $i++):?>
+        <?php $value = $i * ($this->max / $ticks);?>
+        <?php $x = $i * ($this->graphWidth / $ticks);?>
     <text font-size='12'
         style='font-family: Arial;'
         text-anchor='middle'

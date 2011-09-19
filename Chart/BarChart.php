@@ -78,7 +78,7 @@ class BarChart extends Chart
                 $max = $item['value'];
             }
         }
-        $this->max = $max;
+        $this->max = pow(10, ceil(log($max+1, 10)));
     }
     
 } // END class BarChart
