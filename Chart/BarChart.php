@@ -79,6 +79,17 @@ class BarChart extends Chart
             }
         }
         $this->max = pow(10, ceil(log($max+1, 10)));
+
+        $high = $this->max;
+        for ($i = 0; $i++ < 4;) {
+            $temp = $this->max*$i*0.25;
+            if (($temp/$max) > 1){
+                $high = $temp;
+                break;
+            }
+        }
+
+        $this->max = $high;
     }
     
 } // END class BarChart
